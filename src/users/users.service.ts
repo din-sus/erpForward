@@ -74,7 +74,7 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     let check = await this.userRepo.findOne({where: {id: id}})
 
-    if(!check) return {success: false, message: 'Check your email and password again'}
+    if(!check) return {success: false, message: 'There is no such user💔'}
 
     let update = this.userRepo.merge(check, updateUserDto)
     await this.userRepo.save(update)
