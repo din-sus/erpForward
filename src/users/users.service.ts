@@ -2,28 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './schemas/users.schema';
 import { Model } from 'mongoose';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { sign } from 'jsonwebtoken';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entities/users.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private readonly userModel: Model<User>){}
+  constructor(@InjectRepository(User) private readonly userRepo: Repository<User>){}
 
   async register(registerUserDto: RegisterUserDto) {
-    let checkUser = await this.userModel.find(registerUserDto)
+    try {
+      let checkUser = await this.userRepo.findOne({where: {login: registerUserDto.login}})
 
-    if(checkUser) return {success: false, message: 'You registered before, please login❗'}
+      if(checkUser) return {success: false, message: 'You registered before, please login❗'}
 
-    let registerUser = await this.userModel.create(registerUserDto)
-    await registerUser.save()
-    return {success: true, message: 'You have successsfully registered✅'}
+      let registerUser = this.userRepo.create(registerUserDto)
+      await this.userRepo.save(registerUser)
+
+      return {success: true, message: 'You have successsfully registered✅'}
+      
+    } catch (error) {
+      return {succes: false, message: error.message}
+    }
   }
 
   async login(loginUserDto: LoginUserDto) {
-    let checkLogin = await this.userModel.find(loginUserDto)
+    let checkLogin = await this.userRepo.findOne({where: {login: loginUserDto.login}})
 
     if(!checkLogin) return {success: false, message: 'You cannot login, first you have to register❗'}
 
@@ -31,23 +39,55 @@ export class UsersService {
     return {success: true, message: 'You have successfully logined✅', token: token}
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    try {
+      let checkIfExists = await this.userRepo.findOne({where: {login: createUserDto.login}})
+
+      if(checkIfExists) return {success: false, message: 'This user already exists❗'}
+
+      let createUser = this.userRepo.create(createUserDto)
+      await this.userRepo.save(createUser)
+
+      return {success: true, message: 'Created successfully✅'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    try {
+      return await this.userRepo.find()
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    let check = await this.userRepo.findOne({where: {id: id}})
+    
+    if(!check) return {success: false, message: 'There is no such User💔'}
+
+    return check
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    let check = await this.userRepo.findOne({where: {id: id}})
+
+    if(!check) return {success: false, message: 'Check your email and password again'}
+
+    let update = this.userRepo.merge(check, updateUserDto)
+    await this.userRepo.save(update)
+
+    return {success: true, message: 'Updated successfully✅'}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    let deleteUser = await this.userRepo.findOne({where: {id}})
+
+    if(!deleteUser) return {success: false, message: 'There is no such User💔'}
+    
+    let d = await this.userRepo.delete(deleteUser)
+    return {success: true, message: 'Successfully deleted✅'}
   }
 }

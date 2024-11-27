@@ -1,5 +1,4 @@
-import { IsDate, IsNotEmpty, IsString } from "class-validator"
-import { Date } from "mongoose"
+import { IsDate, IsEmail, IsNotEmpty, IsString } from "class-validator"
 
 export class CreateUserDto {
     @IsString()
@@ -13,15 +12,15 @@ export class CreateUserDto {
     @IsString()
     photo: string
 
-    @IsDate()
     @IsNotEmpty()
-    birthDate: Date
+    birthDate: string
 
     @IsString()
     @IsNotEmpty()
-    phoneNumber: number
+    phoneNumber: string
 
     @IsString()
+    @IsEmail()
     @IsNotEmpty()
     login: string
 
