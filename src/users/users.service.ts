@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/users.entity';
+import { Request, request } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -63,12 +64,16 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number) {
-    let check = await this.userRepo.findOne({where: {id: id}})
-    
-    if(!check) return {success: false, message: 'There is no such User💔'}
+  async findOne(@Req() request: Request) {
+    let token:any = request.headers.token
+    let {login}:any = verify(token, 'secret-key-erp-forward')
 
-    return check
+    if(!login) return {success: false, message: 'Token hato❗'}
+    let checkUser = await this.userRepo.findOne({where: {login: login}})
+
+    if(!checkUser) return {success: false, message: 'There is no such User❗'}
+
+    return checkUser
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

@@ -7,6 +7,7 @@ import { VerifyToken } from './middleware/VerifyToken';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/users.entity';
 import { PlacementTestModule } from './placement_test/placement_test.module';
+import { GroupsModule } from './groups/groups.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -20,7 +21,7 @@ import { PlacementTestModule } from './placement_test/placement_test.module';
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule],
+    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule],
   controllers: [AppController],
   providers: [AppService],
 })

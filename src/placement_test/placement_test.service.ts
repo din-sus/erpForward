@@ -94,10 +94,16 @@ export class PlacementTestService {
 
       if(!check) return {success: false, message: 'There is no such user❗'}
 
-      let update = this.testRepo.merge(check, updatePlacementTestDto)
-      await this.testRepo.save(update)
-      
-      return {success: true, message: 'Updated successfully✅'}
+      Object.assign(check, updatePlacementTestDto);
+
+    // Пересчитать total
+      check.total = 
+          (check.module1 || 0) + 
+          (check.module2 || 0) + 
+          (check.module3 || 0);
+
+      // Сохранить изменения
+      return this.testRepo.save(check);
 
     } catch (error) {
       return {success: false, message: error.message}

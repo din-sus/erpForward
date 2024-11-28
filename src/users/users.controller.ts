@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { Request, request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -62,7 +63,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get('one')
   @ApiOperation({summary: 'Getting one exact user side'})
   @ApiOkResponse({
     description: 'Found successfully',
@@ -71,8 +72,8 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: 'There is no such user',
   })
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Req() request: Request) {
+    return this.usersService.findOne(request);
   }
 
   @Patch('update/:id')
