@@ -17,6 +17,9 @@ export class User {
     @Column()
     surname: string
 
+    @Column({default: 'somehting'})
+    photo: string
+    
     @Column()
     birthDate: string
 
