@@ -42,6 +42,13 @@ export class AppModule implements NestModule{
         { path: '/placement-test/:id', method: RequestMethod.GET },
         { path: '/placement-test/update/:id', method: RequestMethod.PATCH },
         { path: '/placement-test/delete/:id', method: RequestMethod.DELETE },
+
+        // groups
+        { path: '/groups', method: RequestMethod.GET },
+        { path: '/groups/filter', method: RequestMethod.GET },
+        { path: '/groups/create', method: RequestMethod.POST },
+        { path: '/groups/update/:id', method: RequestMethod.PATCH },
+        { path: '/groups/delete/:id', method: RequestMethod.DELETE },
       )
   }
 }

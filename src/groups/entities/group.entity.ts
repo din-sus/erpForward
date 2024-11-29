@@ -5,7 +5,7 @@ export class Group {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({unique: true})
     name: string
 
     @Column()
@@ -20,9 +20,6 @@ export class Group {
     @Column()
     branch: string
 
-    @Column({
-        type: 'enum',
-        enum: ['Deactive', 'Active']
-    })
+    @Column({default: 'Active'})
     status: string
 }
