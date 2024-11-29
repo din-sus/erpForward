@@ -4,6 +4,7 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { FilterLessonsDto } from './dto/filter-group.dto';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { GroupPaginationDto } from './dto/pagination-group.dto';
 
 @Controller('groups')
 export class GroupsController {
@@ -44,8 +45,8 @@ export class GroupsController {
     description: 'Successfully found',
     type: CreateGroupDto
   })
-  findAll() {
-    return this.groupsService.findAll();
+  findAll(@Query() groupPagination: GroupPaginationDto) {
+    return this.groupsService.findAll(groupPagination);
   }
 
   @Get(':id')

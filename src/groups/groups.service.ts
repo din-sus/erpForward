@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
 import { Repository } from 'typeorm';
 import { FilterLessonsDto } from './dto/filter-group.dto';
+import { GroupPaginationDto } from './dto/pagination-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -48,9 +49,12 @@ export class GroupsService {
     }
   }
 
-  async findAll() {
+  async findAll(groupPagination: GroupPaginationDto) {
     try {
-      return await this.groupRepo.find()
+      return await this.groupRepo.find({
+        skip: groupPagination.skip,
+        take: groupPagination.limit || 5
+      })
     } catch (error) {
       return {success: false, message: 'There is no data❗'}
     }

@@ -4,6 +4,7 @@ import { UpdatePlacementTestDto } from './dto/update-placement_test.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlacementTest } from './entities/placement_test.entity';
 import { Repository } from 'typeorm';
+import { TestPaginationDto } from './dto/pagination-test.dto';
 
 @Injectable()
 export class PlacementTestService {
@@ -68,9 +69,12 @@ export class PlacementTestService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationTest: TestPaginationDto) {
     try {
-      return await this.testRepo.find()
+      return await this.testRepo.find({
+        skip: paginationTest.skip,
+        take: paginationTest.limit || 5
+      })
     } catch (error) {
       return {success: false, message: error.message}
     }

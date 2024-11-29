@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 import { PlacementTestService } from './placement_test.service';
 import { CreatePlacementTestDto } from './dto/create-placement_test.dto';
 import { UpdatePlacementTestDto } from './dto/update-placement_test.dto';
+import { TestPaginationDto } from './dto/pagination-test.dto';
 
 @Controller('placement-test')
 export class PlacementTestController {
@@ -13,8 +14,8 @@ export class PlacementTestController {
   }
 
   @Get()
-  findAll() {
-    return this.placementTestService.findAll();
+  findAll(@Query() paginationDto: TestPaginationDto) {
+    return this.placementTestService.findAll(paginationDto);
   }
 
   @Get(':id')
