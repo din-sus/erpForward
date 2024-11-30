@@ -53,7 +53,7 @@ export class GroupsService {
     try {
       return await this.groupRepo.find({
         skip: groupPagination.skip,
-        take: groupPagination.limit || 5
+        take: groupPagination.limit || 8
       })
     } catch (error) {
       return {success: false, message: 'There is no data❗'}

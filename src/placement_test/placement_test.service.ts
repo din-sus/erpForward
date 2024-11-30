@@ -72,11 +72,12 @@ export class PlacementTestService {
   async findAll(paginationTest: TestPaginationDto) {
     try {
       return await this.testRepo.find({
+        order: {id: 'DESC'},
         skip: paginationTest.skip,
-        take: paginationTest.limit || 5
+        take: paginationTest.limit || 8
       })
     } catch (error) {
-      return {success: false, message: error.message}
+      return {success: false, message: error.message}   
     }
   }
 
