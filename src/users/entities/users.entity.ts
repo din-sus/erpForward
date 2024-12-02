@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Student } from "src/students/entities/student.entity";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -28,4 +29,7 @@ export class User {
 
     @Column({default: 'user'})
     role: string
+
+    @OneToMany(() => Student, (student) => student.user, {onDelete: 'CASCADE'})
+    student: [Student]
 }

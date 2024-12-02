@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/users.entity';
 import { PlacementTestModule } from './placement_test/placement_test.module';
 import { GroupsModule } from './groups/groups.module';
+import { StudentsModule } from './students/students.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -16,12 +17,12 @@ import { GroupsModule } from './groups/groups.module';
     port: 5432,
     username: 'postgres',
     password: '0490',
-    database: 's',
+    database: 'ss',
     entities: [User],
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule],
+    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule, StudentsModule],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -49,6 +50,13 @@ export class AppModule implements NestModule{
         { path: '/groups/create', method: RequestMethod.POST },
         { path: '/groups/update/:id', method: RequestMethod.PATCH },
         { path: '/groups/delete/:id', method: RequestMethod.DELETE },
+
+        // students
+        { path: '/students', method: RequestMethod.GET },
+        { path: '/students/:id', method: RequestMethod.GET },
+        { path: '/students/create', method: RequestMethod.POST },
+        { path: '/students/update/:id', method: RequestMethod.PATCH },
+        { path: '/students/delete/:id', method: RequestMethod.DELETE },
       )
   }
 }

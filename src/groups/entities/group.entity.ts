@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Student } from "src/students/entities/student.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Group {
@@ -22,4 +23,13 @@ export class Group {
 
     @Column({default: 'Active'})
     status: string
+
+    @Column()
+    courseStartingDate: string
+
+    @Column()
+    courseEndingDate: string
+
+    @OneToMany(() => Student, (student) => student.group, {onDelete: 'CASCADE'})
+    student: Student[]
 }

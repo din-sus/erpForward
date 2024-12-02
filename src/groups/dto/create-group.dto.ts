@@ -55,4 +55,12 @@ export class CreateGroupDto {
     @IsNotEmpty()
     @IsString()
     status: string
+
+    @IsString()
+    @IsNotEmpty()
+    courseStartingDate: string
+
+    @IsString()
+    @IsNotEmpty()
+    courseEndingDate: string
 }
