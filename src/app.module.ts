@@ -9,6 +9,7 @@ import { User } from './users/entities/users.entity';
 import { PlacementTestModule } from './placement_test/placement_test.module';
 import { GroupsModule } from './groups/groups.module';
 import { StudentsModule } from './students/students.module';
+import { LidModule } from './lid/lid.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -22,7 +23,7 @@ import { StudentsModule } from './students/students.module';
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule, StudentsModule],
+    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule, StudentsModule, LidModule],
   controllers: [AppController],
   providers: [AppService],
 })
