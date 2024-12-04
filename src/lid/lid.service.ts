@@ -9,8 +9,20 @@ import { Repository } from 'typeorm';
 export class LidService {
   constructor(@InjectRepository(Lid) private readonly lidRepo: Repository<Lid>){}
 
-  create(createLidDto: CreateLidDto) {
-    return 'This action adds a new lid';
+  async create(createLidDto: CreateLidDto) {
+    try {
+      let check = await this.lidRepo.findOne({where: {phoneNumber: createLidDto.phoneNumber}})
+
+      if(check) return {success: false, message: 'You already sended a message❗'}
+
+      let create = this.lidRepo.create(createLidDto)
+      await this.lidRepo.save(create)
+
+      return {success: true, message: 'Successfully sended✅, wait until the Administrator will call you'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
   }
 
   async findAll() {
@@ -29,19 +41,30 @@ export class LidService {
     }
   }
 
-  update(id: number, updateLidDto: UpdateLidDto) {
-    return `This action updates a #${id} lid`;
+  async update(id: number, updateLidDto: UpdateLidDto) {
+    try {
+      let check = await this.lidRepo.findOne({where: {id: id}})
+
+      if(!check) return {success: false, message: 'There is no such User❗'}
+
+      let update = this.lidRepo.merge(check, updateLidDto)
+      await this.lidRepo.save(update)
+
+      return {success: true, message: 'Successfully updated✅'}
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
   }
 
   async remove(id: number) {
     try {
       let check = await this.lidRepo.findOne({where: {id: id}})
 
-      if(!check) return {success: false, message: 'There is no such User'}
+      if(!check) return {success: false, message: 'There is no such User❗'}
 
       await this.lidRepo.delete(check)
 
-      return{ success: true, message: 'Found'}
+      return{ success: true, message: 'Deleted successfully✅'}
 
     } catch (error) {
       return {success: false, message: error.message}

@@ -85,8 +85,8 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: 'There is no such user',
   })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  update(@Req() request: Request, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(request, +id, updateUserDto);
   }
 
   @Delete('delete/:id')

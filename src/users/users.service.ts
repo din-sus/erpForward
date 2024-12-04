@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/users.entity';
 import { Request, request } from 'express';
+import { UpdateStudentDto } from 'src/students/dto/update-student.dto';
 
 @Injectable()
 export class UsersService {
@@ -76,15 +77,23 @@ export class UsersService {
     return checkUser
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(@Req() request: Request, id: number, updateUserDto: UpdateUserDto) {
     let check = await this.userRepo.findOne({where: {id: id}})
 
     if(!check) return {success: false, message: 'There is no such user💔'}
 
     let update = this.userRepo.merge(check, updateUserDto)
+
+    let token:any = request.headers.token
+    let {login}: any = verify(token, 'secret-key-erp-forward')
+    let newLogin = login
+    newLogin = updateUserDto.login
+
+    let newToken = sign({newLogin}, 'secret-key-erp-forward')
+
     await this.userRepo.save(update)
 
-    return {success: true, message: 'Updated successfully✅'}
+    return {success: true, message: 'Updated successfully✅', token: newToken}
   }
 
   async remove(id: number) {

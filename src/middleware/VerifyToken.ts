@@ -20,10 +20,13 @@ export class VerifyToken implements NestMiddleware{
             }
 
             let {login}:any = verify(token, 'secret-key-erp-forward')
+            let {newLogin}:any = verify(token, 'secret-key-erp-forward')
 
             if(!login) {
-                res.send({success: false, message: 'Wrong token❗'})
-                return
+                if(!newLogin) {
+                    res.send({success: false, message: 'Wrong token❗'})
+                    return
+                }
             }
 
             let checkUser = await this.userRepo.findOne({where: {login: login}})

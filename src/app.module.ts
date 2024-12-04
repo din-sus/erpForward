@@ -10,6 +10,7 @@ import { PlacementTestModule } from './placement_test/placement_test.module';
 import { GroupsModule } from './groups/groups.module';
 import { StudentsModule } from './students/students.module';
 import { LidModule } from './lid/lid.module';
+import { MainTeacherToken } from './middleware/MainTeacherToken';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -58,6 +59,13 @@ export class AppModule implements NestModule{
         { path: '/students/create', method: RequestMethod.POST },
         { path: '/students/update/:id', method: RequestMethod.PATCH },
         { path: '/students/delete/:id', method: RequestMethod.DELETE },
+
+        // lid
+        { path: '/lid', method: RequestMethod.GET },
+        { path: '/lid/:id', method: RequestMethod.GET },
+        { path: '/lid/create', method: RequestMethod.POST },
+        { path: '/lid/update/:id', method: RequestMethod.PATCH },
+        { path: '/lid/delete/:id', method: RequestMethod.DELETE },
       )
   }
 }

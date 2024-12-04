@@ -14,8 +14,8 @@ export class FilterLessonsDto {
   branch?: string;
 
   @IsOptional()
-  @IsNumber()
-  daysOfLessons?: number;
+  @IsString()
+  daysOfLessons?: string;
 
   @IsOptional()
   @IsString()

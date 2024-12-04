@@ -7,7 +7,7 @@ import { UpdateLidDto } from './dto/update-lid.dto';
 export class LidController {
   constructor(private readonly lidService: LidService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createLidDto: CreateLidDto) {
     return this.lidService.create(createLidDto);
   }
@@ -22,12 +22,12 @@ export class LidController {
     return this.lidService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateLidDto: UpdateLidDto) {
     return this.lidService.update(+id, updateLidDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.lidService.remove(+id);
   }
