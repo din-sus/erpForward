@@ -3,6 +3,7 @@ import { LidService } from './lid.service';
 import { CreateLidDto } from './dto/create-lid.dto';
 import { UpdateLidDto } from './dto/update-lid.dto';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { LidPaginationDto } from './dto/lid-pagination.dto';
 
 @Controller('lid')
 export class LidController {
@@ -20,8 +21,8 @@ export class LidController {
   @ApiOkResponse({description: "Found successfully", type: CreateLidDto})
   @ApiBadRequestResponse({description: 'Data not found'})
   @Get()
-  findAll() {
-    return this.lidService.findAll();
+  findAll(@Body() lidPaginationDto: LidPaginationDto) {
+    return this.lidService.findAll(lidPaginationDto);
   }
 
   @ApiOperation({summary: 'Getting one exact users info from LID table'})

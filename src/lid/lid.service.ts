@@ -4,6 +4,7 @@ import { UpdateLidDto } from './dto/update-lid.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Lid } from './entities/lid.entity';
 import { Repository } from 'typeorm';
+import { LidPaginationDto } from './dto/lid-pagination.dto';
 
 @Injectable()
 export class LidService {
@@ -25,9 +26,13 @@ export class LidService {
     }
   }
 
-  async findAll() {
+  async findAll(lidPagination: LidPaginationDto) {
     try {
-      return await this.lidRepo.find()
+      return await this.lidRepo.find({
+        order: {id: 'DESC'},
+        skip: lidPagination.skip,
+        take: lidPagination.limit || 8
+      })
     } catch (error) {
       return {success: false, message: error.message}
     }

@@ -46,7 +46,9 @@ export class StudentsService {
 
   async findAll() {
     try {
-      return await this.studentRepo.find({relations: ['user', 'group']})
+      let students = await this.studentRepo.find({relations: ['user', 'group']})
+
+      return students.filter((student) => student.user.role !== 'admin');
 
     } catch (error) {
       return {success: false, message: error.message}
@@ -55,7 +57,13 @@ export class StudentsService {
 
   async findOne(id: number) {
     try {
-      return await this.studentRepo.findOne({where: {id: id}, relations: ['group', 'user']})
+      let students = await this.studentRepo.findOne({where: {id: id}, relations: ['group', 'user']})
+
+      if(students.user.role == 'admin'){
+        return await this.studentRepo.findOne({where: {id: id}, relations: ['group']})
+      }
+
+      return students
 
     } catch (error) {
       return {success: false, message: error.message}

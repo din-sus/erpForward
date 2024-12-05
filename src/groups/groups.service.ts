@@ -52,8 +52,10 @@ export class GroupsService {
   async findAll(groupPagination: GroupPaginationDto) {
     try {
       return await this.groupRepo.find({
+        order: {id: 'DESC'},
         skip: groupPagination.skip,
-        take: groupPagination.limit || 8
+        take: groupPagination.limit || 8,
+        relations: ['student']
       })
     } catch (error) {
       return {success: false, message: 'There is no data❗'}

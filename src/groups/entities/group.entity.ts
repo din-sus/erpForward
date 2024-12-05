@@ -1,5 +1,6 @@
 import { Student } from "src/students/entities/student.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Teacher } from "src/teachers/entities/teacher.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Group {
@@ -12,7 +13,7 @@ export class Group {
     @Column()
     level: string
 
-    @Column()
+    @Column({unique: true})
     teacherName: string
 
     @Column()
@@ -32,4 +33,7 @@ export class Group {
 
     @OneToMany(() => Student, (student) => student.group, {onDelete: 'CASCADE'})
     student: Student[]
+
+    @ManyToOne(() => Teacher, (teacher) => teacher.group, {onDelete: 'CASCADE'})
+    teacher: Teacher
 }

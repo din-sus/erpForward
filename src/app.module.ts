@@ -11,6 +11,7 @@ import { GroupsModule } from './groups/groups.module';
 import { StudentsModule } from './students/students.module';
 import { LidModule } from './lid/lid.module';
 import { MainTeacherToken } from './middleware/MainTeacherToken';
+import { TeachersModule } from './teachers/teachers.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -24,7 +25,7 @@ import { MainTeacherToken } from './middleware/MainTeacherToken';
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule, StudentsModule, LidModule],
+    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule],
   controllers: [AppController],
   providers: [AppService],
 })
