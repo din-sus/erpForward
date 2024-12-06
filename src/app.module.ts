@@ -20,7 +20,7 @@ import { TeachersModule } from './teachers/teachers.module';
     port: 5432,
     username: 'postgres',
     password: '0490',
-    database: 'ss',
+    database: 'erp_forward_demo',
     entities: [User],
     synchronize: true,
     autoLoadEntities: true
@@ -67,6 +67,13 @@ export class AppModule implements NestModule{
         { path: '/lid/create', method: RequestMethod.POST },
         { path: '/lid/update/:id', method: RequestMethod.PATCH },
         { path: '/lid/delete/:id', method: RequestMethod.DELETE },
+      )
+
+      .apply(MainTeacherToken)
+      .forRoutes(
+        // teachers
+        { path: '/teachers', method: RequestMethod.GET },
+        { path: '/teachers/create', method: RequestMethod.POST },
       )
   }
 }

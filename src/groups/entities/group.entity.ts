@@ -20,6 +20,9 @@ export class Group {
     daysOfLessons: string
 
     @Column()
+    startingEndingTime: string
+
+    @Column()
     branch: string
 
     @Column({default: 'Active'})

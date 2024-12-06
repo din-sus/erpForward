@@ -39,6 +39,15 @@ export class CreateGroupDto {
     daysOfLessons: string
 
     @ApiProperty({
+        description: 'Starting and ending time of the Group',
+        example: '15:00-16:30',
+        required: true
+    })
+    @IsString()
+    @IsNotEmpty()
+    startingEndingTime: string
+
+    @ApiProperty({
         description: 'Branch name of the Group',
         example: 'Chilonzor',
         required: true

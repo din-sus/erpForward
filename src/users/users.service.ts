@@ -11,10 +11,11 @@ import { Repository } from 'typeorm';
 import { User } from './entities/users.entity';
 import { Request, request } from 'express';
 import { UpdateStudentDto } from 'src/students/dto/update-student.dto';
+import { Teacher } from 'src/teachers/entities/teacher.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private readonly userRepo: Repository<User>){}
+  constructor(@InjectRepository(User) private readonly userRepo: Repository<User>, @InjectRepository(Teacher) private readonly teacherRepo: Repository<Teacher>){}
 
   async register(registerUserDto: RegisterUserDto) {
     try {
@@ -34,8 +35,13 @@ export class UsersService {
 
   async login(loginUserDto: LoginUserDto) {
     let checkLogin = await this.userRepo.findOne({where: {login: loginUserDto.login}})
+    let teacherCheck = await this.teacherRepo.findOne({where: {login: loginUserDto.login}})
 
-    if(!checkLogin) return {success: false, message: 'You cannot login, first you have to register❗'}
+    if(!checkLogin) {
+      if(!teacherCheck) {
+        return {success: false, message: 'You cannot login, first you have to register❗'}
+      }
+    }
 
     let token = sign({login: loginUserDto.login}, 'secret-key-erp-forward')
     return {success: true, message: 'You have successfully logined✅', token: token}
