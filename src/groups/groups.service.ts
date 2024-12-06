@@ -62,8 +62,16 @@ export class GroupsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  async findOne(id: number) {
+    try {
+      return await this.groupRepo.findOne({
+        where: {id: id},
+        order: {id: 'DESC'},
+        relations: ['student']
+      })
+    } catch (error) {
+      return {success: false, message: 'There is no data❗'}
+    }
   }
 
   async update(id: number, updateGroupDto: UpdateGroupDto) {

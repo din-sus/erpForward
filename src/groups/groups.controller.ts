@@ -49,6 +49,13 @@ export class GroupsController {
     return this.groupsService.findAll(groupPagination);
   }
 
+  @ApiOperation({
+    summary: 'Getting one exact Group'
+  })
+  @ApiOkResponse({
+    description: 'Successfully found',
+    type: CreateGroupDto
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.groupsService.findOne(+id);
