@@ -13,7 +13,7 @@ export class Group {
     @Column()
     level: string
 
-    @Column({unique: true})
+    @Column()
     teacherName: string
 
     @Column()

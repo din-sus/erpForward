@@ -34,8 +34,8 @@ export class UsersService {
   }
 
   async login(loginUserDto: LoginUserDto) {
-    let checkLogin = await this.userRepo.findOne({where: {login: loginUserDto.login}})
-    let teacherCheck = await this.teacherRepo.findOne({where: {login: loginUserDto.login}})
+    let checkLogin = await this.userRepo.findOne({where: {login: loginUserDto.login, password: loginUserDto.password}})
+    let teacherCheck = await this.teacherRepo.findOne({where: {login: loginUserDto.login, password: loginUserDto.password}})
 
     if(!checkLogin) {
       if(!teacherCheck) {
@@ -74,9 +74,15 @@ export class UsersService {
   async findOne(@Req() request: Request) {
     let token:any = request.headers.token
     let {login}:any = verify(token, 'secret-key-erp-forward')
+    let {newLogin}:any = verify(token, 'secret-key-erp-forward')
 
-    if(!login) return {success: false, message: 'Token hato❗'}
-    let checkUser = await this.userRepo.findOne({where: {login: login}})
+    if(!login) {
+      if(!newLogin) {
+        return {success: false, message: 'Token hato❗'}
+      }
+    }
+
+    let checkUser = await this.userRepo.findOne({where: {login: login || newLogin}})
 
     if(!checkUser) return {success: false, message: 'There is no such User❗'}
 

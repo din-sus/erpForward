@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('teachers')
 export class TeachersController {
@@ -17,7 +19,15 @@ export class TeachersController {
   @ApiBadRequestResponse({
     description: 'Teacher already exists'
   })
+  // @UseInterceptors(FileInterceptor('file', {
+  //   storage: diskStorage({
+  //     filename(req, file, callback) {
+  //       callback(null, 'file.png')
+  //     },
+  //   })
+  // }))
   create(@Body() createTeacherDto: CreateTeacherDto) {
+    // console.log(file)
     return this.teachersService.create(createTeacherDto);
   }
 

@@ -6,10 +6,11 @@ import { Group } from './entities/group.entity';
 import { Repository } from 'typeorm';
 import { FilterLessonsDto } from './dto/filter-group.dto';
 import { GroupPaginationDto } from './dto/pagination-group.dto';
+import { Student } from 'src/students/entities/student.entity';
 
 @Injectable()
 export class GroupsService {
-  constructor(@InjectRepository(Group) private readonly groupRepo: Repository<Group>){}
+  constructor(@InjectRepository(Group) private readonly groupRepo: Repository<Group>, @InjectRepository(Student) private readonly studentRepo: Repository<Student>){}
 
   async filter(filters: FilterLessonsDto) {
     const queryBuilder = this.groupRepo.createQueryBuilder('group');
