@@ -2,11 +2,12 @@ import { NestMiddleware } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
+import { Teacher } from "src/teachers/entities/teacher.entity";
 import { User } from "src/users/entities/users.entity";
 import { Repository } from "typeorm";
 
 export class MainTeacherToken implements NestMiddleware{
-    constructor(@InjectRepository(User) private readonly userRepo: Repository<User>){}
+    constructor(@InjectRepository(Teacher) private readonly teacherRepo: Repository<Teacher>){}
 
     async use(req: Request, res: Response, next: NextFunction) {
         try {
@@ -24,7 +25,8 @@ export class MainTeacherToken implements NestMiddleware{
                 return
             }
 
-            let checkUser = await this.userRepo.findOne({where: {login: login}})
+            let checkUser = await this.teacherRepo.findOne({where: {login: login}})
+            console.log(checkUser)
 
             if(!checkUser) {
                 res.send({success: false, message: 'You are not found💔'})

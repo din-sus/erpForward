@@ -12,6 +12,7 @@ import { StudentsModule } from './students/students.module';
 import { LidModule } from './lid/lid.module';
 import { MainTeacherToken } from './middleware/MainTeacherToken';
 import { TeachersModule } from './teachers/teachers.module';
+import { Teacher } from './teachers/entities/teacher.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -25,7 +26,7 @@ import { TeachersModule } from './teachers/teachers.module';
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule],
+    UsersModule, TypeOrmModule.forFeature([User]), TypeOrmModule.forFeature([Teacher]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -37,7 +38,7 @@ export class AppModule implements NestModule{
         // users
         { path: '/users/all', method: RequestMethod.GET},
         { path: '/users/create', method: RequestMethod.POST },
-        { path: '/users/:id', method: RequestMethod.GET },
+        // { path: '/users/:id', method: RequestMethod.GET },
         { path: '/users/update/:id', method: RequestMethod.PATCH },
         { path: '/users/delete/:id', method: RequestMethod.DELETE },
 

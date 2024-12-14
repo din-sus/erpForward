@@ -83,10 +83,16 @@ export class UsersService {
     }
 
     let checkUser = await this.userRepo.findOne({where: {login: login || newLogin}})
+    let checkTeacher = await this.teacherRepo.findOne({where: {login: login}})
 
-    if(!checkUser) return {success: false, message: 'There is no such User❗'}
+    if(!checkUser) {
+      if(!checkTeacher){
+        return {success: false, message: 'There is no such User❗'}
+      }
+    }
 
-    return checkUser
+    if(checkUser && !checkTeacher) return checkUser
+    if(!checkUser && checkTeacher) return checkTeacher
   }
 
   async update(@Req() request: Request, id: number, updateUserDto: UpdateUserDto) {

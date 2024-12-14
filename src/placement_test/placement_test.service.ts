@@ -100,6 +100,7 @@ export class PlacementTestService {
       if(!check) return {success: false, message: 'There is no such user❗'}
 
       Object.assign(check, updatePlacementTestDto);
+      console.log(check.total > 30)
 
     // Пересчитать total
       check.total = 
@@ -107,8 +108,33 @@ export class PlacementTestService {
           (check.module2 || 0) + 
           (check.module3 || 0);
 
+
+      if(check.total <= 10){
+        check.level = 'Beginner'
+      }
+      
+      if(check.total >= 11 && check.total <= 20){
+        check.level = 'Elementary'
+      }
+
+      if(check.total >= 21 && check.total <= 30){
+        check.level = 'Pre-intermediate'
+      }
+
+      if(check.total >= 31 && check.total <= 40){
+        check.level = 'Intermediate'
+      }
+
+      if(check.total >= 41 && check.total <= 50){
+        check.level = 'Upper-intermediate'
+      }
+
+      if(check.total >= 51 && check.total <= 60){
+        check.level = 'Advanced'
+      }
       // Сохранить изменения
-      return this.testRepo.save(check);
+      await this.testRepo.save(check);
+      return {success: true, message: 'Successfully updated✅'}
 
     } catch (error) {
       return {success: false, message: error.message}

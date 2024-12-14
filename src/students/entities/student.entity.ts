@@ -1,6 +1,6 @@
 import { Group } from "src/groups/entities/group.entity";
 import { User } from "src/users/entities/users.entity";
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Student {
@@ -37,6 +37,6 @@ export class Student {
     @ManyToOne(() => Group, (group) => group.student, {onDelete: 'CASCADE'})
     group: Group
 
-    @ManyToOne(() => User, (user) => user.student, {onDelete: 'CASCADE'})
-    user: User
+    @OneToMany(() => User, (user) => user.student, {onDelete: 'CASCADE'})
+    user: Group
 }

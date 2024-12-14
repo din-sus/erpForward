@@ -20,4 +20,8 @@ export class FilterLessonsDto {
   @IsOptional()
   @IsString()
   status?: string;
+
+  @IsOptional()
+  @IsString()
+  groupType?: string;
 }

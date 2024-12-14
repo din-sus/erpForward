@@ -16,6 +16,9 @@ export class Group {
     @Column()
     teacherName: string
 
+    @Column({nullable: true})
+    groupType: string
+
     @Column()
     daysOfLessons: string
 

@@ -31,6 +31,9 @@ export class GroupsService {
     if (filters.status) {
       queryBuilder.andWhere('group.status = :status', { status: filters.status });
     }
+    if (filters.groupType) {
+      queryBuilder.andWhere('group.groupType = :groupType', { groupType: filters.groupType });
+    }
 
     return await queryBuilder.getMany();
   }

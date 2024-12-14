@@ -17,13 +17,9 @@ export class StudentsService {
 
       let checkGroup = await this.groupRepo.findOne({where: {name: createStudentDto.groupName}})
 
-      let checkUser = await this.userRepo.findOne({where: {phoneNumber: createStudentDto.phoneNumber}})
-
       if(checkStudent) return {success: false, message: 'Student already studies in the group❗'}
       
       if(!checkGroup) return {success: false, message: 'There is no such group❗'}
-
-      if(!checkUser) return {success: false, message: 'Check your phone number, is it correct❓'}
 
       let create = this.studentRepo.create({
         ...createStudentDto,
@@ -32,7 +28,6 @@ export class StudentsService {
         courseStartingDate: checkGroup.courseStartingDate,
         courseEndingDate: checkGroup.courseEndingDate,
         group: checkGroup,
-        user: checkUser,
       })
 
       await this.studentRepo.save(create)
@@ -46,9 +41,7 @@ export class StudentsService {
 
   async findAll() {
     try {
-      let students = await this.studentRepo.find({relations: ['user', 'group']})
-
-      return students.filter((student) => student.user.role !== 'admin');
+      return await this.studentRepo.find({relations: ['group']})
 
     } catch (error) {
       return {success: false, message: error.message}
@@ -57,13 +50,7 @@ export class StudentsService {
 
   async findOne(id: number) {
     try {
-      let students = await this.studentRepo.findOne({where: {id: id}, relations: ['group', 'user']})
-
-      if(students.user.role == 'admin'){
-        return await this.studentRepo.findOne({where: {id: id}, relations: ['group']})
-      }
-
-      return students
+      return await this.studentRepo.findOne({where: {id: id}, relations: ['group']})
 
     } catch (error) {
       return {success: false, message: error.message}
@@ -80,8 +67,6 @@ export class StudentsService {
     if(!checkStudent) return {success: false, message: 'There is no such Student❗'}
 
     if(!checkGroup) return {success: false, message: 'There is no such Group❗'}
-
-    if(!checkUser) return {success: false, message: 'There is no such User❗'}
 
     let update = this.studentRepo.merge(checkStudent, updateStudentDto)
     await this.studentRepo.save(update)

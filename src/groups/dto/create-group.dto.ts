@@ -12,6 +12,15 @@ export class CreateGroupDto {
     name:  string
 
     @ApiProperty({
+        description: 'Type of the Group',
+        example: 'Extra | Ultra | etc',
+        required: true
+    })
+    @IsString()
+    @IsNotEmpty()
+    groupType:  string
+
+    @ApiProperty({
         description: 'Level of the Group',
         example: 'Beginner',
         required: true
