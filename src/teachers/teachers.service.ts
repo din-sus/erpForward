@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from './entities/teacher.entity';
 import { Repository } from 'typeorm';
 import { Group } from 'src/groups/entities/group.entity';
+import { Request } from 'express';
+import { SelfTeacherUpdateDto } from './dto/self-teacher-update.dto';
 
 @Injectable()
 export class TeachersService {
@@ -51,10 +53,50 @@ export class TeachersService {
   }
 
   async update(id: number, updateTeacherDto: UpdateTeacherDto) {
-    return `This action updates a #${id} teacher`;
+    try {
+      let checkTeacher = await this.teacherRepo.findOne({where: {id: id}})
+      let checkGroup = await this.groupRepo.findOne({where: {teacherName: updateTeacherDto.fullname}})
+
+      if(!checkTeacher) return {success: false, message: 'There is no such Teacher❗'}
+      if(!checkGroup) return {success: false, message: 'There is no such Group❗'}
+
+      let update = this.teacherRepo.merge(checkTeacher, updateTeacherDto)
+      await this.teacherRepo.save(update)
+
+      return {success: true, message: 'Successfully updated✅'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
+  }
+
+  async selfUpdate(id: number, selfUpdateDto: SelfTeacherUpdateDto){
+    try {
+      let check = await this.teacherRepo.findOne({where: {id: id}})
+
+      if(!check) return {success: false, message: 'There is no such Teacher❗'}
+
+      let update = this.teacherRepo.merge(check, selfUpdateDto)
+      await this.teacherRepo.save(update)
+
+      return {success: true, message: 'Successfully updated✅'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} teacher`;
+    try {
+      let check = await this.teacherRepo.findOne({where: {id: id}})
+
+      if(!check) return {success: false, message: 'There is no such Teacher❗'}
+
+      await this.teacherRepo.delete(check)
+      return {success: true, message: 'Successfully deleted✅'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
   }
 }
