@@ -67,13 +67,15 @@ export class AppModule implements NestModule{
         { path: '/lid/create', method: RequestMethod.POST },
         { path: '/lid/update/:id', method: RequestMethod.PATCH },
         { path: '/lid/delete/:id', method: RequestMethod.DELETE },
+
+        // teachers
+        { path: '/teachers/create', method: RequestMethod.POST },
       )
 
       .apply(MainTeacherToken)
       .forRoutes(
         // teachers
         { path: '/teachers', method: RequestMethod.GET },
-        { path: '/teachers/create', method: RequestMethod.POST },
       )
   }
 }
