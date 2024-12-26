@@ -43,9 +43,9 @@ export class CreateStudentDto {
         example: "10000",
         required: false
     })
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    balance?: number
+    balance?: string
 
     @ApiProperty({
         description: 'Group name of the student',

@@ -48,6 +48,15 @@ export class TeachersService {
     }
   }
 
+  async findAllTeachers() {
+    try {
+      return await this.teacherRepo.find()
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
+  }
+
   async findOne(id: number) {
     return `This action returns a #${id} teacher`;
   }

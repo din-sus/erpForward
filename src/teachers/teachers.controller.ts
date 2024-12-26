@@ -45,6 +45,20 @@ export class TeachersController {
     return this.teachersService.findAll();
   }
 
+
+  @Get('all')
+  @ApiOperation({summary: 'Getting all teachers'})
+  @ApiOkResponse({
+    description: 'Found',
+    type: CreateTeacherDto
+  })
+  @ApiBadRequestResponse({
+    description: 'Not found'
+  })
+  findAllTeachers() {
+    return this.teachersService.findAllTeachers();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.teachersService.findOne(+id);

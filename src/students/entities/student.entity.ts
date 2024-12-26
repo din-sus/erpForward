@@ -13,8 +13,8 @@ export class Student {
     @Column({unique: true})
     phoneNumber: string
 
-    @Column({default: 0})
-    balance: number
+    @Column({default: '0'})
+    balance: string
 
     @Column()
     level: string

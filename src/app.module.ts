@@ -57,6 +57,7 @@ export class AppModule implements NestModule{
 
         // students
         { path: '/students', method: RequestMethod.GET },
+        { path: '/students/dept', method: RequestMethod.GET },
         { path: '/students/:id', method: RequestMethod.GET },
         { path: '/students/create', method: RequestMethod.POST },
         { path: '/students/update/:id', method: RequestMethod.PATCH },
@@ -73,6 +74,7 @@ export class AppModule implements NestModule{
         { path: '/teachers/create', method: RequestMethod.POST },
         { path: '/teachers/update/:id', method: RequestMethod.PATCH },
         { path: '/teachers/delete/:id', method: RequestMethod.DELETE },
+        { path: '/teachers/all', method: RequestMethod.GET }
       )
 
       .apply(MainTeacherToken)

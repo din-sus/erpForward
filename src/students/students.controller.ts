@@ -37,6 +37,20 @@ export class StudentsController {
     return this.studentsService.findAll();
   }
 
+  @Get('dept')
+  @ApiOperation({
+    summary: 'Getting all students in dept and all info about them'
+  })
+  @ApiOkResponse({
+    description: 'Successfully found'
+  })
+  @ApiBadRequestResponse({
+    description: 'No such relations found'
+  })
+  findInDept() {
+    return this.studentsService.findInDept();
+  }
+
   @Get(':id')
   @ApiOperation({
     summary: 'Getting info about one exact student'
