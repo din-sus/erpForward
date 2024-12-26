@@ -13,4 +13,7 @@ export class Lid {
 
     @Column()
     branch: string
+
+    @Column({nullable: true})
+    status: string
 }

@@ -28,4 +28,13 @@ export class CreateLidDto {
     @IsString()
     @IsNotEmpty()
     branch: string
+
+    @ApiProperty({
+        description: 'The status of the user',
+        example: "Waiting | Inquires",
+        required: true
+    })
+    @IsString()
+    @IsNotEmpty()
+    status: string
 }
