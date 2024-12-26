@@ -104,10 +104,9 @@ export class UsersService {
 
     let token:any = request.headers.token
     let {login}: any = verify(token, 'secret-key-erp-forward')
-    let newLogin = login
-    newLogin = updateUserDto.login
+    login = updateUserDto.login
 
-    let newToken = sign({newLogin}, 'secret-key-erp-forward')
+    let newToken = sign({login}, 'secret-key-erp-forward')
 
     await this.userRepo.save(update)
 
