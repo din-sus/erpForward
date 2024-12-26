@@ -26,7 +26,7 @@ export class GroupsService {
       queryBuilder.andWhere('group.branch = :branch', { branch: filters.branch });
     }
     if (filters.daysOfLessons) {
-      queryBuilder.andWhere('group.daysOfLessons = :daysOfLessons', { daysOfLesson: filters.daysOfLessons });
+      queryBuilder.andWhere('group.daysOfLessons = :daysOfLessons', { daysOfLessons: filters.daysOfLessons });
     }
     if (filters.status) {
       queryBuilder.andWhere('group.status = :status', { status: filters.status });
