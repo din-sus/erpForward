@@ -4,6 +4,7 @@ import { CreateLidDto } from './dto/create-lid.dto';
 import { UpdateLidDto } from './dto/update-lid.dto';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { LidPaginationDto } from './dto/lid-pagination.dto';
+import { ColumnsDto } from './dto/create-columns.dto';
 
 @Controller('lid')
 export class LidController {
@@ -15,6 +16,22 @@ export class LidController {
   @Post('create')
   create(@Body() createLidDto: CreateLidDto) {
     return this.lidService.create(createLidDto);
+  }
+
+  @Post('column')
+  @ApiOperation({summary: "Saving Columns with their leads in it"})
+  @ApiOkResponse({description: "Successfully created✅", type: ColumnsDto})
+  @ApiBadRequestResponse({description: "Column already exists❌"})
+  columnLidCreate(@Body() lidColumnDto: ColumnsDto){
+    return this.lidService.createLidColumn(lidColumnDto)
+  }
+
+  @Get('column/get')
+  @ApiOperation({summary: 'Getting all Columns with all needed info'})
+  @ApiOkResponse({description: "Successfully found"})
+  @ApiBadRequestResponse({description: "Data not found"})
+  getLidColumns(){
+    return this.lidService.getLidColumns()
   }
 
   @ApiOperation({summary: 'Getting users calls from LID table'})

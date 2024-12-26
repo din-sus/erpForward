@@ -5,10 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Lid } from './entities/lid.entity';
 import { Repository } from 'typeorm';
 import { LidPaginationDto } from './dto/lid-pagination.dto';
+import { LidColumnEntity } from './entities/column.lid.dto';
+import { ColumnsDto } from './dto/create-columns.dto';
 
 @Injectable()
 export class LidService {
-  constructor(@InjectRepository(Lid) private readonly lidRepo: Repository<Lid>){}
+  constructor(@InjectRepository(Lid) private readonly lidRepo: Repository<Lid>,
+  @InjectRepository(LidColumnEntity) private readonly lidColumn: Repository<LidColumnEntity>){}
 
   async create(createLidDto: CreateLidDto) {
     try {
@@ -20,6 +23,31 @@ export class LidService {
       await this.lidRepo.save(create)
 
       return {success: true, message: 'Successfully sended✅, wait until the Administrator will call you'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
+  }
+
+  async createLidColumn(lidColumnDto: ColumnsDto){
+    try {
+      let check = await this.lidColumn.findOne({where: {title: lidColumnDto.title, status: lidColumnDto.status}})
+
+      if(check) return {success: false, message: 'Column already exists❗'}
+
+      let create = this.lidColumn.create(lidColumnDto)
+      create.items = await this.lidRepo.find({where: {status: lidColumnDto.status}})
+      await this.lidColumn.save(create)
+      return {success: true, message: 'Successfully created✅'}
+
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
+  }
+
+  async getLidColumns(){
+    try {
+      return await this.lidColumn.find({relations: ['items']})
 
     } catch (error) {
       return {success: false, message: error.message}
@@ -53,6 +81,7 @@ export class LidService {
       if(!check) return {success: false, message: 'There is no such User❗'}
 
       let update = this.lidRepo.merge(check, updateLidDto)
+      update.column = await this.lidColumn.findOne({where: {status: updateLidDto.status}})
       await this.lidRepo.save(update)
 
       return {success: true, message: 'Successfully updated✅'}

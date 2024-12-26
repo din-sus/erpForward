@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { LidColumnEntity } from "./column.lid.dto";
 
 @Entity()
 export class Lid {
@@ -16,4 +17,7 @@ export class Lid {
 
     @Column({nullable: true})
     status: string
+
+    @ManyToOne(() => LidColumnEntity, (column) => column.items)
+    column: LidColumnEntity
 }
