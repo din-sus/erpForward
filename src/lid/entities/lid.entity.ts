@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { LidColumnEntity } from "./column.lid.dto";
+import { Student } from "src/students/entities/student.entity";
 
 @Entity()
 export class Lid {
@@ -20,4 +21,8 @@ export class Lid {
 
     @ManyToOne(() => LidColumnEntity, (column) => column.items)
     column: LidColumnEntity
+
+    @OneToOne(() => Student)
+    @JoinColumn()
+    student: Student
 }

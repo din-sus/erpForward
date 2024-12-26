@@ -1,6 +1,7 @@
 import { Group } from "src/groups/entities/group.entity";
+import { Lid } from "src/lid/entities/lid.entity";
 import { User } from "src/users/entities/users.entity";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Student {
@@ -39,4 +40,8 @@ export class Student {
 
     @OneToMany(() => User, (user) => user.student, {onDelete: 'CASCADE'})
     user: Group
+
+    @OneToOne(() => Lid)
+    @JoinColumn()
+    lid: Lid
 }

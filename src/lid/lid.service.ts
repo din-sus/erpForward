@@ -7,11 +7,13 @@ import { Repository } from 'typeorm';
 import { LidPaginationDto } from './dto/lid-pagination.dto';
 import { LidColumnEntity } from './entities/column.lid.dto';
 import { ColumnsDto } from './dto/create-columns.dto';
+import { Student } from 'src/students/entities/student.entity';
 
 @Injectable()
 export class LidService {
   constructor(@InjectRepository(Lid) private readonly lidRepo: Repository<Lid>,
-  @InjectRepository(LidColumnEntity) private readonly lidColumn: Repository<LidColumnEntity>){}
+  @InjectRepository(LidColumnEntity) private readonly lidColumn: Repository<LidColumnEntity>,
+  @InjectRepository(Student) private readonly studentRepo: Repository<Student>){}
 
   async create(createLidDto: CreateLidDto) {
     try {
@@ -20,6 +22,7 @@ export class LidService {
       if(check) return {success: false, message: 'You already sended a message❗'}
 
       let create = this.lidRepo.create(createLidDto)
+      create.student = await this.studentRepo.findOne({where: {phoneNumber: createLidDto.phoneNumber}})
       await this.lidRepo.save(create)
 
       return {success: true, message: 'Successfully sended✅, wait until the Administrator will call you'}
@@ -59,7 +62,8 @@ export class LidService {
       return await this.lidRepo.find({
         order: {id: 'DESC'},
         skip: lidPagination.skip,
-        take: lidPagination.limit || 8
+        take: lidPagination.limit || 8,
+        relations: ['student']
       })
     } catch (error) {
       return {success: false, message: error.message}
