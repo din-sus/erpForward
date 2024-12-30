@@ -1,6 +1,7 @@
+import { Branch } from "src/branches/entities/branch.entity";
 import { Student } from "src/students/entities/student.entity";
 import { Teacher } from "src/teachers/entities/teacher.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Group {
@@ -24,6 +25,10 @@ export class Group {
 
     @Column()
     startingEndingTime: string
+
+    @OneToOne(() => Branch)
+    @JoinColumn()
+    branches: Branch
 
     @Column()
     branch: string

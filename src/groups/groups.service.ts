@@ -7,10 +7,11 @@ import { Repository } from 'typeorm';
 import { FilterLessonsDto } from './dto/filter-group.dto';
 import { GroupPaginationDto } from './dto/pagination-group.dto';
 import { Student } from 'src/students/entities/student.entity';
+import { Branch } from 'src/branches/entities/branch.entity';
 
 @Injectable()
 export class GroupsService {
-  constructor(@InjectRepository(Group) private readonly groupRepo: Repository<Group>, @InjectRepository(Student) private readonly studentRepo: Repository<Student>){}
+  constructor(@InjectRepository(Group) private readonly groupRepo: Repository<Group>, @InjectRepository(Student) private readonly studentRepo: Repository<Student>, @InjectRepository(Branch) private readonly branchRepo: Repository<Branch>){}
 
   async filter(filters: FilterLessonsDto) {
     const queryBuilder = this.groupRepo.createQueryBuilder('group');
@@ -44,6 +45,7 @@ export class GroupsService {
 
       if(checkUser) return {success: false, message: 'Group is already exists❗'}
       let create = this.groupRepo.create(createGroupDto)
+      create.branches = await this.branchRepo.findOne({where: {name: createGroupDto.branch}})
       await this.groupRepo.save(create)
 
       return {success: true, message: 'Group created successfully✅'}
@@ -59,7 +61,7 @@ export class GroupsService {
         order: {id: 'DESC'},
         skip: groupPagination.skip,
         take: groupPagination.limit || 8,
-        relations: ['student']
+        relations: ['student', 'branches']
       })
     } catch (error) {
       return {success: false, message: 'There is no data❗'}

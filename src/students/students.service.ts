@@ -41,7 +41,7 @@ export class StudentsService {
 
   async findAll() {
     try {
-      return await this.studentRepo.find({relations: ['group']})
+      return await this.studentRepo.find({relations: ['group'], order: {id: "DESC"}})
 
     } catch (error) {
       return {success: false, message: error.message}
@@ -50,7 +50,7 @@ export class StudentsService {
 
   async findInDept() {
     try {
-      let all = await this.studentRepo.find({relations: ['group']})
+      let all = await this.studentRepo.find({relations: ['group'], order: {id: 'DESC'}})
       let depts = all.filter((el) => Number(el.balance) < 0)
       
       return depts

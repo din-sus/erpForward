@@ -13,6 +13,7 @@ import { LidModule } from './lid/lid.module';
 import { MainTeacherToken } from './middleware/MainTeacherToken';
 import { TeachersModule } from './teachers/teachers.module';
 import { Teacher } from './teachers/entities/teacher.entity';
+import { BranchesModule } from './branches/branches.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -26,7 +27,7 @@ import { Teacher } from './teachers/entities/teacher.entity';
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), TypeOrmModule.forFeature([Teacher]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule],
+    UsersModule, TypeOrmModule.forFeature([User]), TypeOrmModule.forFeature([Teacher]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule, BranchesModule],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -66,6 +67,8 @@ export class AppModule implements NestModule{
         // lid
         { path: '/lid', method: RequestMethod.GET },
         { path: '/lid/:id', method: RequestMethod.GET },
+        { path: '/lid/column/get', method: RequestMethod.GET },
+        { path: '/lid/column', method: RequestMethod.POST },
         { path: '/lid/create', method: RequestMethod.POST },
         { path: '/lid/update/:id', method: RequestMethod.PATCH },
         { path: '/lid/delete/:id', method: RequestMethod.DELETE },
@@ -74,7 +77,14 @@ export class AppModule implements NestModule{
         { path: '/teachers/create', method: RequestMethod.POST },
         { path: '/teachers/update/:id', method: RequestMethod.PATCH },
         { path: '/teachers/delete/:id', method: RequestMethod.DELETE },
-        { path: '/teachers/all', method: RequestMethod.GET }
+        { path: '/teachers/all', method: RequestMethod.GET },
+
+        // branches
+        { path: '/branches', method: RequestMethod.GET },
+        { path: '/branches/:id', method: RequestMethod.GET },
+        { path: '/branches/create', method: RequestMethod.POST },
+        { path: '/branches/udpate/:id', method: RequestMethod.PATCH },
+        { path: '/branches/delete/:id', method: RequestMethod.DELETE },
       )
 
       .apply(MainTeacherToken)
