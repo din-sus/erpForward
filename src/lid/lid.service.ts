@@ -23,6 +23,7 @@ export class LidService {
 
       let create = this.lidRepo.create(createLidDto)
       create.student = await this.studentRepo.findOne({where: {phoneNumber: createLidDto.phoneNumber}})
+      create.column = await this.lidColumn.findOne({where: {status: createLidDto.status}})
       await this.lidRepo.save(create)
 
       return {success: true, message: 'Successfully sended✅, wait until the Administrator will call you'}
@@ -34,13 +35,14 @@ export class LidService {
 
   async createLidColumn(lidColumnDto: ColumnsDto){
     try {
-      let check = await this.lidColumn.findOne({where: {title: lidColumnDto.title, status: lidColumnDto.status}})
+      let check = await this.lidColumn.findOne({where: {title: lidColumnDto.title}})
 
       if(check) return {success: false, message: 'Column already exists❗'}
 
       let create = this.lidColumn.create(lidColumnDto)
       create.items = await this.lidRepo.find({where: {status: lidColumnDto.status}})
       await this.lidColumn.save(create)
+      console.log(create)
       return {success: true, message: 'Successfully created✅'}
 
     } catch (error) {
@@ -63,7 +65,7 @@ export class LidService {
         order: {id: 'DESC'},
         skip: lidPagination.skip,
         take: lidPagination.limit || 8,
-        relations: ['student']
+        relations: ['student', 'column']
       })
     } catch (error) {
       return {success: false, message: error.message}

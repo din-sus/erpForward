@@ -12,7 +12,7 @@ export class LidColumnEntity {
   @Column()
   color: string;
 
-  @Column({unique: true})
+  @Column()
   status: string
 
   @OneToMany(() => Lid, (lid) => lid.column, { cascade: true })
