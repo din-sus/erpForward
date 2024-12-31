@@ -10,14 +10,15 @@ import { Group } from 'src/groups/entities/group.entity';
 export class BranchesService {
   constructor(@InjectRepository(Branch) private readonly branchRepo: Repository<Branch>,
              @InjectRepository(Group) private readonly groupRepo: Repository<Group>){}
-  async create(createBranchDto: CreateBranchDto) {
+  async create(createBranchDto: CreateBranchDto, locationImg: any) {
     try {
       let checkRoomInBranch = await this.branchRepo.findOne({where: {roomName: createBranchDto.roomName, name: createBranchDto.name}})
 
       if(checkRoomInBranch) return {success: false, message: 'This room already exists in this Branch❗'}
 
       let create = this.branchRepo.create(createBranchDto)
-      create.group = await this.groupRepo.findOne({where: {branch: createBranchDto.name}})
+      create.locationImg = locationImg
+      create.group = await this.groupRepo.find({where: {branch: createBranchDto.name}})
       await this.branchRepo.save(create)
 
       return {success: true, message: 'Successfully created✅'}

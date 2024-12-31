@@ -8,7 +8,7 @@ export class Group {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({unique: true})
+    @Column({unique: false})
     name: string
 
     @Column()
@@ -26,8 +26,7 @@ export class Group {
     @Column()
     startingEndingTime: string
 
-    @OneToOne(() => Branch)
-    @JoinColumn()
+    @ManyToOne(() => Branch, (branch) => branch.group, {onDelete: 'CASCADE'})
     branches: Branch
 
     @Column()

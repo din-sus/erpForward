@@ -38,29 +38,20 @@ export class CreateBranchDto {
     locationLink: string
 
     @ApiProperty({
-        description: "Location image of the Branch",
-        example: "image",
-        required: true
-    })
-    @IsString()
-    @IsNotEmpty()
-    locationImg: string
-
-    @ApiProperty({
         description: "Branch capacity of the Branch",
         example: 1000,
         required: true
     })
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    branchCapacity: number
+    branchCapacity: string
 
     @ApiProperty({
         description: "Room capacity of the Branch",
         example: 1000,
         required: true
     })
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    roomCapacity: number
+    roomCapacity: string
 }

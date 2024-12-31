@@ -1,12 +1,12 @@
 import { Group } from "src/groups/entities/group.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Branch {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({unique: false})
     name: string
 
     @Column()
@@ -21,13 +21,12 @@ export class Branch {
     @Column()
     locationImg: string
 
-    @Column()
-    branchCapacity: number
+    @Column({nullable: true})
+    branchCapacity: string
 
-    @Column()
-    roomCapacity: number
+    @Column({nullable: true})
+    roomCapacity: string
 
-    @OneToOne(() => Group)
-    @JoinColumn()
-    group: Group
+    @OneToMany(() => Group, (group) => group.branches, {onDelete: 'CASCADE'})
+    group: Group[]
 }

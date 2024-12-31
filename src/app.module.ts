@@ -14,6 +14,8 @@ import { MainTeacherToken } from './middleware/MainTeacherToken';
 import { TeachersModule } from './teachers/teachers.module';
 import { Teacher } from './teachers/entities/teacher.entity';
 import { BranchesModule } from './branches/branches.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -27,7 +29,10 @@ import { BranchesModule } from './branches/branches.module';
     synchronize: true,
     autoLoadEntities: true
   }),
-    UsersModule, TypeOrmModule.forFeature([User]), TypeOrmModule.forFeature([Teacher]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule, BranchesModule],
+    UsersModule, TypeOrmModule.forFeature([User]), TypeOrmModule.forFeature([Teacher]), PlacementTestModule, GroupsModule, StudentsModule, LidModule, TeachersModule,ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads', // URL для доступа к файлам
+    }), BranchesModule],
   controllers: [AppController],
   providers: [AppService],
 })
