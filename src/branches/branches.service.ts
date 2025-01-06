@@ -36,7 +36,7 @@ export class BranchesService {
     return await this.branchRepo.findOne({where: {id: id}, relations: ['group']})
   }
 
-  async update(id: number, updateBranchDto: UpdateBranchDto) {
+  async update(id: number, updateBranchDto: UpdateBranchDto, locationImage: any) {
     try {
       let checkBranch = await this.branchRepo.findOne({where: {id: id}})
       let checkRoomInBranch = await this.branchRepo.findOne({where: {roomName: updateBranchDto.roomName, name: updateBranchDto.name}})
@@ -45,6 +45,7 @@ export class BranchesService {
       if(checkRoomInBranch) return {success: false, message: 'This room already exists in this Branch❗'}
 
       let update = this.branchRepo.merge(checkBranch, updateBranchDto)
+      if(locationImage != null) update.locationImg = locationImage
       await this.branchRepo.save(update)
 
       return {success: true, message: 'Successfully updated✅'}

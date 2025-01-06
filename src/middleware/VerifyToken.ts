@@ -40,7 +40,7 @@ export class VerifyToken implements NestMiddleware{
             next()
 
         } catch (error) {
-            res.send({success: false, message: 'Something wrong with token❗'})
+            res.send({success: false, message: error.message})
         }
     }
 }

@@ -17,8 +17,8 @@ export class SelfTeacherUpdateDto {
         required: true
     })
     @IsNotEmpty()
-    @IsNumber()
-    age: number
+    @IsString()
+    age: string
 
     @ApiProperty({
         description: 'Phone number of Teacher',
@@ -30,15 +30,6 @@ export class SelfTeacherUpdateDto {
     phoneNumber: string
 
     // role: string
-
-    @ApiProperty({
-        description: 'Teacher image of Teacher',
-        example: 'link',
-        required: true
-    })
-    @IsString()
-    @IsNotEmpty()
-    teacherImg: string
 
     @ApiProperty({
         description: 'Country address of Teacher',

@@ -3,31 +3,13 @@ import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validat
 
 export class CreateUserDto {
     @ApiProperty({
-        description: 'Name of the user',
-        example: 'Eshmat',
+        description: 'Fullname of the user',
+        example: 'Eshmat Toshmatov',
         required: true
     })
     @IsString()
     @IsNotEmpty()
-    name: string
-
-    @ApiProperty({
-        description: 'Surname of the user',
-        example: 'Toshmatov',
-        required: true
-    })
-    @IsString()
-    @IsNotEmpty()
-    surname: string
-
-    @ApiProperty({
-        description: 'Photo of the user',
-        example: 'https://i.pinimg.com/736x/91/36/d5/9136d5fd9ef02d299e51986be545a10e.jpg',
-        required: false
-    })
-    @IsString()
-    @IsOptional()
-    photo?: string
+    fullname: string
 
     @ApiProperty({
         description: 'Birth date of the user',

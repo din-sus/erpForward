@@ -9,8 +9,8 @@ export class Teacher {
     @Column({unique: true})
     fullname: string
 
-    @Column()
-    age: number
+    @Column({nullable: true})
+    age: string
 
     @Column({unique: true})
     phoneNumber: string
@@ -27,10 +27,10 @@ export class Teacher {
     @Column()
     IELTSscore: string
 
-    @Column()
+    @Column({nullable: true})
     IELTSscoreImg: string
 
-    @Column()
+    @Column({nullable: true})
     teacherImg: string
 
     @Column()

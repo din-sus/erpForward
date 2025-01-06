@@ -47,13 +47,14 @@ export class UsersService {
     return {success: true, message: 'You have successfully logined✅', token: token}
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, photo: string) {
     try {
       let checkIfExists = await this.userRepo.findOne({where: {login: createUserDto.login}})
 
       if(checkIfExists) return {success: false, message: 'This user already exists❗'}
 
       let createUser = this.userRepo.create(createUserDto)
+      createUser.photo = photo
       await this.userRepo.save(createUser)
 
       return {success: true, message: 'Created successfully✅'}
@@ -65,7 +66,7 @@ export class UsersService {
 
   async findAll() {
     try {
-      return await this.userRepo.find()
+      return await this.userRepo.find({order: {id: 'DESC'}})
     } catch (error) {
       return {success: false, message: error.message}
     }

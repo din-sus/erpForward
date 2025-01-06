@@ -61,14 +61,32 @@ export class BranchesController {
   }
 
   @Patch('update/:id')
+  @UseInterceptors(
+    FileInterceptor('locationImage', {
+      storage: diskStorage({
+        destination: './uploads/branches', // Папка для сохранения файлов
+        filename: (req, file, callback) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname); // Получение расширения файла
+          callback(null, `branch-${uniqueSuffix}${ext}`);
+        },
+      }),
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
+          return callback(new Error('Only image files are allowed!'), false);
+        }
+        callback(null, true);
+      },
+    }),
+  )
   @ApiOperation({description: "Updating Branches"})
   @ApiOkResponse({
     description: "Successfully updated✅",
     type: UpdateBranchDto
   })
   @ApiBadRequestResponse({description: "This room in this branch already exists❗ | There is no such Branch❗"})
-  update(@Param('id') id: string, @Body() updateBranchDto: UpdateBranchDto) {
-    return this.branchesService.update(+id, updateBranchDto);
+  update(@Param('id') id: string, @Body() updateBranchDto: UpdateBranchDto, @UploadedFile() locationImg: Express.Multer.File) {
+    return this.branchesService.update(+id, updateBranchDto, locationImg?.filename);
   }
 
   @Delete('delete/:id')

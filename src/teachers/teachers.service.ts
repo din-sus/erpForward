@@ -13,7 +13,7 @@ export class TeachersService {
   constructor(@InjectRepository(Teacher) private readonly teacherRepo: Repository<Teacher>, 
               @InjectRepository(Group) private readonly groupRepo: Repository<Group>){}
 
-  async create(createTeacherDto: CreateTeacherDto) {
+  async create(createTeacherDto: CreateTeacherDto, teacherImg: string, IELTSscoreImg: string) {
     try {
       let check = await this.teacherRepo.findOne({where: {login: createTeacherDto.login}})
       let findTheGroup = await this.groupRepo.find({where: {teacherName: createTeacherDto.fullname}})
@@ -23,11 +23,15 @@ export class TeachersService {
       let createTeacher = this.teacherRepo.create(createTeacherDto)
 
       if(!findTheGroup) {
+        createTeacher.IELTSscoreImg = IELTSscoreImg
+        createTeacher.teacherImg = teacherImg
         createTeacher.group = []
         await this.teacherRepo.save(createTeacher)
         return {success: true, message: 'Successfully created✅'}
       }
 
+      createTeacher.IELTSscoreImg = IELTSscoreImg
+      createTeacher.teacherImg = teacherImg
       createTeacher.group = findTheGroup
       await this.teacherRepo.save(createTeacher)
 
@@ -50,7 +54,7 @@ export class TeachersService {
 
   async findAllTeachers() {
     try {
-      return await this.teacherRepo.find()
+      return await this.teacherRepo.find({order: {id: 'DESC'}})
 
     } catch (error) {
       return {success: false, message: error.message}
@@ -61,7 +65,7 @@ export class TeachersService {
     return `This action returns a #${id} teacher`;
   }
 
-  async update(id: number, updateTeacherDto: UpdateTeacherDto) {
+  async update(id: number, updateTeacherDto: UpdateTeacherDto, teacherImg: string, IELTSscoreImg: string) {
     try {
       let checkTeacher = await this.teacherRepo.findOne({where: {id: id}})
       let checkGroup = await this.groupRepo.findOne({where: {teacherName: updateTeacherDto.fullname}})
@@ -70,6 +74,10 @@ export class TeachersService {
       if(!checkGroup) return {success: false, message: 'There is no such Group❗'}
 
       let update = this.teacherRepo.merge(checkTeacher, updateTeacherDto)
+      if(IELTSscoreImg != null && teacherImg != null) {
+        update.IELTSscoreImg = IELTSscoreImg
+        update.teacherImg = teacherImg
+      }
       await this.teacherRepo.save(update)
 
       return {success: true, message: 'Successfully updated✅'}
@@ -79,13 +87,14 @@ export class TeachersService {
     }
   }
 
-  async selfUpdate(id: number, selfUpdateDto: SelfTeacherUpdateDto){
+  async selfUpdate(id: number, selfUpdateDto: SelfTeacherUpdateDto, teacherImg: string){
     try {
       let check = await this.teacherRepo.findOne({where: {id: id}})
 
       if(!check) return {success: false, message: 'There is no such Teacher❗'}
 
       let update = this.teacherRepo.merge(check, selfUpdateDto)
+      if(teacherImg != null) update.teacherImg = teacherImg
       await this.teacherRepo.save(update)
 
       return {success: true, message: 'Successfully updated✅'}

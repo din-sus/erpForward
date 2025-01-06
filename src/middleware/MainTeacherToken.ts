@@ -26,7 +26,6 @@ export class MainTeacherToken implements NestMiddleware{
             }
 
             let checkUser = await this.teacherRepo.findOne({where: {login: login}})
-            console.log(checkUser)
 
             if(!checkUser) {
                 res.send({success: false, message: 'You are not found💔'})

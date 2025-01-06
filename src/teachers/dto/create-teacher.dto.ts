@@ -17,8 +17,8 @@ export class CreateTeacherDto {
         required: true
     })
     @IsNotEmpty()
-    @IsNumber()
-    age: number
+    @IsString()
+    age: string
 
     @ApiProperty({
         description: 'Phone number of Teacher',
@@ -56,24 +56,6 @@ export class CreateTeacherDto {
     @IsNotEmpty()
     @IsString()
     IELTSscore: string
-
-    @ApiProperty({
-        description: 'IELTS score image of Teacher',
-        example: 'link',
-        required: true
-    })
-    @IsString()
-    @IsNotEmpty()
-    IELTSscoreImg: string
-
-    @ApiProperty({
-        description: 'Teacher image of Teacher',
-        example: 'link',
-        required: true
-    })
-    @IsString()
-    @IsNotEmpty()
-    teacherImg: string
 
     @ApiProperty({
         description: 'Working branch of Teacher',

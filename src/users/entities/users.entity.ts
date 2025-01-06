@@ -13,12 +13,9 @@ export class User {
     password: string
 
     @Column()
-    name: string
+    fullname: string
 
     @Column()
-    surname: string
-
-    @Column({default: 'somehting'})
     photo: string
     
     @Column()
